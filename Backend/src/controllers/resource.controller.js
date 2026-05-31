@@ -50,7 +50,7 @@ async (req, res) => {
           resource_type: "auto"
         }
       );
-
+console.log(result);
     const resource =
       await Resource.create({
 
