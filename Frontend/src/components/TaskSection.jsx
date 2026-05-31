@@ -52,6 +52,47 @@ function TaskSection({
     }
   };
 
+  const handleStatusChange = async (taskId, status) => {
+    try {
+      await updateTaskStatus(taskId, status);
+      fetchTasks();
+    } catch (error) {
+      console.error("Error updating task status:", error);
+    }
+  };
+
+  const handleUpdate = async (taskId) => {
+    try {
+      await updateTask(taskId, {
+        title: editTitle,
+        description: editDescription,
+        deadline: editDeadline,
+        assignedTo: editAssignedTo
+      });
+      setEditingId(null);
+      fetchTasks();
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
+  };
+
+  const handleDelete = async (taskId) => {
+    try {
+      await deleteTask(taskId);
+      fetchTasks();
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditTitle("");
+    setEditDescription("");
+    setEditDeadline("");
+    setEditAssignedTo([]);
+  };
+
   const startEdit = (task) => {
     setEditingId(task._id);
     setEditTitle(task.title);
@@ -152,7 +193,7 @@ function TaskSection({
                 <div className="flex flex-col gap-3">
                   <input type="text" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="w-full p-3 rounded-xl bg-[#1e1414] border border-amber-900/40 text-white! text-sm font-semibold" />
                   <textarea value={editDescription} onChange={(e) => setEditDescription(e.target.value)} rows={3} className="w-full p-3 rounded-xl bg-[#1e1414] border border-amber-900/40 text-white! text-sm resize-none" />
-                  <input type="date" value={editDeadline} onChange={(e) => setEditDeadline(e.target.value)} className="w-full p-3 rounded-xl bg-[#1e1414] border border-amber-900/40 text-white! text-sm" />
+                  <input type="date" value={editDeadline} onChange={(e) => setEditDeadline(e.target.value)} className="w-full p-3 rounded-xl bg-[#1e1414] border border-amber-990/40 text-white! text-sm" />
                   <div className="flex gap-2">
                     <button type="button" onClick={() => handleUpdate(task._id)} className="px-4 py-2 rounded-xl bg-emerald-900/60 border border-emerald-700 text-emerald-200 text-xs font-semibold">Save</button>
                     <button type="button" onClick={cancelEdit} className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-gray-400 text-xs font-semibold">Cancel</button>
