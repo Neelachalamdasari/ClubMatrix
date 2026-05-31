@@ -28,11 +28,16 @@ async (eventId, eventData) => {
 
   const response = await API.put(
     `/events/update/${eventId}`,
-    eventData
+    eventData,
+    {
+      headers: {
+        "Content-Type":
+          "multipart/form-data"
+      }
+    }
   );
 
   return response.data;
-
 };
 
 export const deleteEvent =

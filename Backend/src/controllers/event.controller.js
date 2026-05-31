@@ -123,19 +123,15 @@ async (req, res) => {
 };
 
 exports.updateEvent = async (req, res) => {
-
   try {
-
     const event = await Event.findById(
       req.params.eventId
     );
 
     if (!event) {
-
       return res.status(404).json({
         message: "Event not found"
       });
-
     }
 
     const access = await checkCreatorOnly(
@@ -144,19 +140,34 @@ exports.updateEvent = async (req, res) => {
     );
 
     if (!access.allowed) {
-
       return res.status(access.status).json({
         message: access.message
       });
-
     }
 
-    const { title, description, date, venue } = req.body;
+    const {
+      title,
+      description,
+      date,
+      venue
+    } = req.body;
 
-    if (title !== undefined) event.title = title;
-    if (description !== undefined) event.description = description;
-    if (date !== undefined) event.date = date;
-    if (venue !== undefined) event.venue = venue;
+    if (title) event.title = title;
+    if (description) event.description = description;
+    if (date) event.date = date;
+    if (venue) event.venue = venue;
+
+    if (req.file) {
+      const result =
+        await cloudinary.uploader.upload(
+          req.file.path,
+          {
+            folder: "clubmatrix/events"
+          }
+        );
+
+      event.poster = result.secure_url;
+    }
 
     await event.save();
 
@@ -167,14 +178,16 @@ exports.updateEvent = async (req, res) => {
 
   } catch (error) {
 
+    console.error(
+      "UPDATE EVENT ERROR:",
+      error
+    );
+
     res.status(500).json({
       message: error.message
     });
-
   }
-
 };
-
 exports.deleteEvent = async (req, res) => {
 
   try {

@@ -12,7 +12,7 @@ const upload = require("../middleware/upload.middleware");
 const router = express.Router();
 
 router.post("/create/:clubId", protect, coordinatorOnly, upload.single("poster"), createEvent);
-router.put("/update/:eventId", protect, updateEvent);
+router.put("/update/:eventId",protect,upload.single("poster"),updateEvent);
 router.delete("/delete/:eventId", protect, deleteEvent);
 router.get("/upcoming/all", protect, getUpcomingEvents);
 router.get("/:clubId", protect, getClubEvents);
