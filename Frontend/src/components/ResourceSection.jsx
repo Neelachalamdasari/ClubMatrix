@@ -192,12 +192,12 @@ function ResourceSection({ clubId, canManageClub, canEditDelete }) {
                     )}
                     
                     <a
-                      href={resource.fileUrl}
+                      href={`${resource.fileUrl}?fl_attachment`}
                       target="_blank"
                       rel="noreferrer"
                       className="inline-flex items-center gap-1.5 mt-4 text-sm font-semibold text-red-400 hover:text-red-300 transition-colors"
                     >
-                      <span>Open Document Asset</span>
+                      <span>Download Resource</span>
                       <span className="text-xs">↗</span>
                     </a>
                   </div>
